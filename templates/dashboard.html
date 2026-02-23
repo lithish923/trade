@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Bot Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Auto-refresh every 30 seconds -->
+    <meta http-equiv="refresh" content="30">
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-blue-500">Bot Dashboard</h1>
+                <p class="text-gray-400 text-sm">Live Trade Monitor • {{ stats.last_trade_time }}</p>
+            </div>
+            <div class="px-4 py-2 bg-gray-800 rounded border border-gray-700">
+                <span class="text-green-400 text-sm">● System Active</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Total Trades -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm uppercase font-bold">Total Trades</h3>
+                <p class="text-3xl font-bold mt-2">{{ stats.total }}</p>
+            </div>
+            <!-- Buys -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm uppercase font-bold">Buy Orders</h3>
+                <p class="text-3xl font-bold mt-2 text-green-500">{{ stats.buys }}</p>
+            </div>
+            <!-- Sells -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm uppercase font-bold">Sell Orders</h3>
+                <p class="text-3xl font-bold mt-2 text-red-500">{{ stats.sells }}</p>
+            </div>
+        </div>
+
+        <!-- Trade History Table -->
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+            <div class="p-4 border-b border-gray-700">
+                <h2 class="text-xl font-bold">Trade History</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-700 text-gray-300 uppercase text-xs">
+                        <tr>
+                            <th class="px-6 py-3">Time</th>
+                            <th class="px-6 py-3">Symbol</th>
+                            <th class="px-6 py-3">Side</th>
+                            <th class="px-6 py-3">Price</th>
+                            <th class="px-6 py-3">Quantity</th>
+                            <th class="px-6 py-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        {% for trade in trades %}
+                        <tr class="hover:bg-gray-750 transition duration-150">
+                            <td class="px-6 py-4 text-sm text-gray-400">{{ trade.time }}</td>
+                            <td class="px-6 py-4 font-medium">{{ trade.symbol }}</td>
+                            <td class="px-6 py-4">
+                                {% if trade.side == 'BUY' %}
+                                    <span class="bg-green-900 text-green-300 py-1 px-2 rounded text-xs font-bold">BUY</span>
+                                {% else %}
+                                    <span class="bg-red-900 text-red-300 py-1 px-2 rounded text-xs font-bold">SELL</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-sm">{{ trade.price }}</td>
+                            <td class="px-6 py-4 text-sm">{{ trade.qty }}</td>
+                            <td class="px-6 py-4 text-xs text-gray-500">{{ trade.status }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                No trades recorded yet. Waiting for bot activity...
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
